@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
 
 #define MAX_WORDS_IN_SENTENCE_GENERATION 20
 #define MAX_WORD_LENGTH 100
@@ -289,6 +290,8 @@ void fill_dictionary (FILE *fp, int lines_to_read, LinkList *dictionary)
               token2 = strtok (NULL, " \r,\n");
             }
         }
+      else
+        { break; }
       ++i;
       if (i == lines_to_read - 1 && i != -1)
         {
@@ -330,28 +333,26 @@ void free_dictionary (LinkList *dictionary)
  */
 int main (int argc, char *argv[])
 {
-  if (argc != 4 && argc != 5)
+  if (argc != 4 && argc != 3)
     {
       fprintf (stdout, MES1);
       return EXIT_FAILURE;
     }
   FILE *file;
-  file = fopen (argv[3], "r");
+  file = fopen (argv[2], "r");
   if (file == NULL)
     {
       fprintf (stdout, MES2);
       return EXIT_FAILURE;
     }
   int lines_to_read = -1;
-  int seed;
-  sscanf (argv[1], "%d", &seed);
   int num_of_sentence;
-  if (argc == 5)
+  if (argc == 4)
     {
-      sscanf (argv[4], "%d", &lines_to_read);
+      sscanf (argv[3], "%d", &lines_to_read);
     }
-  srand (seed);
-  sscanf (argv[2], "%d", &num_of_sentence);
+  srand (time(NULL));
+  sscanf (argv[1], "%d", &num_of_sentence);
   //create dictionary and initialize
   LinkList *dict = (LinkList *) malloc (sizeof (LinkList));
   VALIDATE(dict)
